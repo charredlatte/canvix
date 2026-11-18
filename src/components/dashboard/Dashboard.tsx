@@ -15,6 +15,7 @@ import {
   Printer,
   BadgeCheck,
   Video,
+  Clapperboard,
   Square,
   FileImage,
   Github,
@@ -103,6 +104,7 @@ const CATEGORY_ICONS: Record<string, typeof Presentation> = {
   document: FileImage,
   logo: BadgeCheck,
   thumbnail: Video,
+  reel: Clapperboard,
 }
 
 const PRESET_ICONS = [Instagram, Instagram, Presentation, Printer, BadgeCheck, Video, Square, FileImage]
