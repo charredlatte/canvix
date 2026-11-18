@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-// collection-v24/reels — 9 premium product & ad reels (v0.24).
+// collection-v24/reels — 10 premium product & ad reels (v0.24).
 //
 // The first templates in the library that ship ANIMATED: every page
 // carries staggered element animations, a page transition and a few
@@ -69,6 +69,20 @@ const sliderCard = (x: number, y: number, size: number, f: (typeof FLAVOURS)[num
     st(f.fruit, { x: x - size * 0.02, y: y + size * 0.62, width: size * 0.26, height: size * 0.26, fontSize: 95 * k, rotation: -20, animation: pop(delay + 0.65) }),
   ]
 }
+
+/** catalogue reel: a warm-grey photo tile that wipes up into place, with a sticker stand-in for the product shot */
+const CATALOG = { bg: '#EDEBE8', tile: '#D9D5CF', ink: '#1F1D1B', mute: '#6F6A64' }
+const catalogTile = (x: number, y: number, width: number, height: number, sticker: string, delay: number, stickerSize = 220) => [
+  sh('rect', { x, y, width, height, fill: CATALOG.tile, cornerRadius: 6, animation: an('wipe', delay, 0.7, { direction: 'up', easing: 'easeInOut' }) }),
+  st(sticker, { x: x + width / 2 - stickerSize / 2, y: y + height / 2 - stickerSize / 2, width: stickerSize, height: stickerSize, fontSize: stickerSize * 0.75, animation: an('fade', delay + 0.5, 0.5) }),
+  tx({ x, y: y + height - 48, width, height: 30, text: 'PRODUCT PHOTO', fontFamily: 'Inter', fontSize: 18, letterSpacing: 3, fill: CATALOG.mute, align: 'center', animation: an('fade', delay + 0.6, 0.4) }),
+]
+const CATALOG_ITEMS = [
+  { n: '001', name: 'Arden chair', sticker: '🪑' },
+  { n: '002', name: 'Mäve armchair', sticker: '🪑' },
+  { n: '003', name: 'Lund dining chair', sticker: '🪑' },
+  { n: '004', name: 'Sola sofa', sticker: '🛋️' },
+]
 
 export const COLLECTION_V24_REELS: TemplateDef[] = [
   // 1 ── Sneaker drop · streetwear, acid green on black
@@ -535,5 +549,56 @@ export const COLLECTION_V24_REELS: TemplateDef[] = [
         ],
       }
     }),
+  },
+
+  // 10 ── Product catalogue · minimal warm grey, one product per slide
+  {
+    slug: 'product-catalog-reel',
+    name: 'Product Catalog Reel',
+    category: 'reel',
+    width: W,
+    height: H,
+    accent: '#B5651D',
+    badge: 'premium',
+    pages: [
+      {
+        id: 'p1',
+        background: { type: 'solid', color: CATALOG.bg },
+        elements: [
+          tx({ x: 80, y: 170, width: 920, height: 240, text: 'OAK & LINEN\nCOLLECTION', fontFamily: 'Playfair Display', fontSize: 88, lineHeight: 1.1, letterSpacing: 2, fill: CATALOG.ink, align: 'center', animation: up(0, 0.8) }),
+          ...catalogTile(80, 540, 440, 500, '🪑', 0.3, 200),
+          ...catalogTile(560, 540, 440, 340, '🪑', 0.45, 160),
+          ...catalogTile(560, 920, 440, 540, '🪑', 0.6, 200),
+          tx({ x: 80, y: 1100, width: 440, height: 40, text: '(001)', fontFamily: 'DM Mono', fontSize: 24, letterSpacing: 2, fill: CATALOG.mute, animation: an('fade', 1.0, 0.5) }),
+          tx({ x: 80, y: 1150, width: 440, height: 200, text: 'Designed to quiet a room and outlast the trend.', fontFamily: 'Inter', fontSize: 30, lineHeight: 1.45, fill: CATALOG.ink, animation: up(1.1) }),
+          ...catalogTile(80, 1500, 920, 320, '🛋️', 0.8, 200),
+        ],
+      },
+      ...CATALOG_ITEMS.map((it, i) => ({
+        id: `p${i + 2}`,
+        transition: morph,
+        background: { type: 'solid' as const, color: CATALOG.bg },
+        elements: [
+          sh('rect', { x: 80, y: 200, width: 150, height: 64, fill: 'transparent', stroke: CATALOG.ink, strokeWidth: 2, cornerRadius: 32, animation: pop(0.1) }),
+          tx({ x: 80, y: 218, width: 150, height: 32, text: it.n, fontFamily: 'DM Mono', fontSize: 24, letterSpacing: 2, fill: CATALOG.ink, align: 'center', animation: an('fade', 0.3, 0.3) }),
+          tx({ x: 80, y: 300, width: 920, height: 100, text: it.name, fontFamily: 'Playfair Display', fontSize: 76, fill: CATALOG.ink, animation: up(0.25, 0.7) }),
+          ...(i === CATALOG_ITEMS.length - 1
+            ? [...catalogTile(80, 460, 920, 560, it.sticker, 0.5, 300), ...catalogTile(80, 1060, 920, 760, it.sticker, 0.75, 360)]
+            : catalogTile(80, 460, 920, 1360, it.sticker, 0.5, 420)),
+          tx({ x: 80, y: 1840, width: 920, height: 30, text: `${it.n} / 004 · OAK & LINEN`, fontFamily: 'DM Mono', fontSize: 20, letterSpacing: 3, fill: CATALOG.mute, align: 'center', animation: an('fade', 1.2, 0.4) }),
+        ],
+      })),
+      {
+        id: 'p6',
+        transition: fade,
+        background: { type: 'solid', color: '#0B0B0B' },
+        elements: [
+          tx({ x: 80, y: 860, width: 920, height: 60, text: 'Shop now at:', fontFamily: 'Inter', fontSize: 40, fill: '#FFFFFF', align: 'center', animation: up(0) }),
+          sh('rect', { x: 240, y: 960, width: 600, height: 104, fill: 'transparent', stroke: '#FFFFFF', strokeWidth: 2, cornerRadius: 52, animation: an('wipe', 0.3, 0.6, { direction: 'left' }) }),
+          tx({ x: 240, y: 994, width: 600, height: 40, text: 'YOURSTORE.COM', fontFamily: 'DM Mono', fontSize: 30, letterSpacing: 4, fill: '#FFFFFF', align: 'center', animation: an('fade', 0.7, 0.4) }),
+          st('👆', { x: 560, y: 1040, width: 110, height: 110, fontSize: 80, animation: pop(1.1, 'click') }),
+        ],
+      },
+    ],
   },
 ]
