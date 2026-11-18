@@ -629,6 +629,7 @@ export const TEMPLATE_CATEGORIES = [
   { id: 'document', label: 'Docs & office', icon: 'file-text' },
   { id: 'logo', label: 'Logos', icon: 'badge' },
   { id: 'thumbnail', label: 'Video & thumbnails', icon: 'video' },
+  { id: 'reel', label: 'Reels & ads', icon: 'clapperboard' },
 ] as const
 
 // ── Defaults factory ─────────────────────────────────────────

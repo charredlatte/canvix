@@ -8,6 +8,8 @@
 //                             every category, styled after what's
 //                             trending on the big template platforms
 //                             (original designs — nothing is copied)
+//   · collection-v24-reels  — 8 animated product & ad reels (the first
+//                             templates that ship with animations)
 //
 // Every template is free forever. The "premium" badge is a quality
 // label, never a paywall.
@@ -23,6 +25,7 @@ import { COLLECTION_V08_DOCS } from './collection-v08-docs'
 import { COLLECTION_V08_THUMBNAILS } from './collection-v08-thumbnails'
 import { COLLECTION_V08_LOGOS } from './collection-v08-logos'
 import { COLLECTION_V17_FIELDS } from './collection-v17-fields'
+import { COLLECTION_V24_REELS } from './collection-v24-reels'
 import { templateVariants } from './variants'
 
 export type { TemplateDef } from './helpers'
@@ -37,6 +40,7 @@ export const BASE_TEMPLATES: TemplateDef[] = [
   ...COLLECTION_V08_THUMBNAILS,
   ...COLLECTION_V08_LOGOS,
   ...COLLECTION_V17_FIELDS,
+  ...COLLECTION_V24_REELS,
 ]
 
 /**
