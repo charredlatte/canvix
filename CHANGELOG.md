@@ -10,13 +10,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Premium product & ad reels** — the first animated templates in the
   library: 8 vertical 1080 × 1920 reels (sneaker drop, skincare glow,
   gadget launch, coffee roast, flash deal, fashion edit, app launch,
-  candle studio), 3–4 pages each with staggered element animations, page
+  candle studio) and a landscape **product slider carousel** (6 flavour
+  slides, the row of colour cards scrolling one step per slide), each
+  with staggered element animations, page
   transitions and sound cues from the offline SFX pack, so Preview /
   Present / video export play a finished reel straight from the
   dashboard. Labelled photo frames mark where the product shot goes.
   New **Reels & ads** category on the dashboard and in the editor's
   Templates panel. With the Aurora and Ink variants the library grows
-  from 366 to 390 designs.
+  from 366 to 393 designs.
 - **WebP export** (Wave 5 remainder, roadmap §4.3) — the fourth raster
   format in the export dialog, riding the browser-native encoder (zero
   new dependencies, the §8 discipline): the format card is

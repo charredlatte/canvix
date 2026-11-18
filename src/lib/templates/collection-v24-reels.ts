@@ -1,11 +1,12 @@
 // ─────────────────────────────────────────────────────────────
-// collection-v24/reels — 8 premium product & ad reels (v0.24).
+// collection-v24/reels — 9 premium product & ad reels (v0.24).
 //
 // The first templates in the library that ship ANIMATED: every page
 // carries staggered element animations, a page transition and a few
 // sound cues from the offline SFX pack, so Preview / Present / video
 // export play a finished reel straight from the dashboard. Vertical
-// 1080 × 1920 (Instagram Reels, TikTok, Shorts, Stories).
+// 1080 × 1920 (Instagram Reels, TikTok, Shorts, Stories), plus one
+// landscape product slider carousel (1920 × 1080).
 //
 // Photo slots are drawn as labelled frames — drop a product photo over
 // one, or let the Photos rail fill it. Original designs, nothing copied.
@@ -41,6 +42,33 @@ const cta = (y: number, text: string, bg: string, fg: string, delay: number, fon
   sh('rect', { x: 190, y, width: 700, height: 120, fill: bg, cornerRadius: 60, animation: pop(delay, 'chime') }),
   tx({ x: 190, y: y + 36, width: 700, height: 60, text, fontFamily: font, bold: true, fontSize: 40, letterSpacing: 2, fill: fg, align: 'center', animation: an('fade', delay + 0.15, 0.4) }),
 ]
+
+/** flavours for the slider carousel: card colour, text ink, fruit */
+const FLAVOURS = [
+  { name: 'Strawberry', card: '#FF8A94', ink: '#B3263A', fruit: '🍓' },
+  { name: 'Cherry', card: '#E23B4A', ink: '#7A0F1C', fruit: '🍒' },
+  { name: 'Orange', card: '#FF9A3C', ink: '#9A4A00', fruit: '🍊' },
+  { name: 'Blackberry', card: '#6E3A7C', ink: '#2E1236', fruit: '🫐' },
+  { name: 'Mango', card: '#FFBE3C', ink: '#8A5A00', fruit: '🥭' },
+  { name: 'Green Apple', card: '#8FD14F', ink: '#2F6B10', fruit: '🍏' },
+]
+
+/** one slider card: rounded colour tile, a bottle photo slot overflowing its top, two fruit stickers.
+ *  Everything pans in from the right, so a slide transition reads as the row scrolling left. */
+const sliderCard = (x: number, y: number, size: number, f: (typeof FLAVOURS)[number], big: boolean, delay: number) => {
+  const k = size / 520
+  const slideIn = (d: number) => an('pan', delay + d, 0.7, { direction: 'right', easing: 'easeInOut' })
+  return [
+    sh('rect', { x, y, width: size, height: size, fill: f.card, cornerRadius: 60 * k, opacity: big ? 1 : 0.8, animation: slideIn(0) }),
+    sh('rect', { x: x + size * 0.3, y: y - size * 0.3, width: size * 0.4, height: size * 1.2, fill: f.ink, cornerRadius: 70 * k, opacity: 0.9, animation: slideIn(0.05) }),
+    ...(big ? [
+      gr('frame', { x: x + size / 2 - 50, y: y + size * 0.2, width: 100, height: 100, fill: 'transparent', stroke: '#FFFFFF', strokeWidth: 3, opacity: 0.7, animation: an('fade', delay + 0.5, 0.4) }),
+      tx({ x: x + size * 0.3, y: y + size * 0.45, width: size * 0.4, height: 36, text: 'BOTTLE PHOTO', fontFamily: 'Inter', fontSize: 22, letterSpacing: 2, fill: '#FFFFFF', opacity: 0.75, align: 'center', animation: an('fade', delay + 0.5, 0.4) }),
+    ] : []),
+    st(f.fruit, { x: x + size * 0.72, y: y - size * 0.12, width: size * 0.3, height: size * 0.3, fontSize: 110 * k, rotation: 15, animation: pop(delay + 0.5, big ? 'pop' : undefined) }),
+    st(f.fruit, { x: x - size * 0.02, y: y + size * 0.62, width: size * 0.26, height: size * 0.26, fontSize: 95 * k, rotation: -20, animation: pop(delay + 0.65) }),
+  ]
+}
 
 export const COLLECTION_V24_REELS: TemplateDef[] = [
   // 1 ── Sneaker drop · streetwear, acid green on black
@@ -478,5 +506,34 @@ export const COLLECTION_V24_REELS: TemplateDef[] = [
         ],
       },
     ],
+  },
+
+  // 9 ── Product slider carousel · landscape, one flavour per slide
+  {
+    slug: 'product-slider-carousel',
+    name: 'Product Slider Carousel',
+    category: 'reel',
+    width: 1920,
+    height: 1080,
+    accent: '#E23B4A',
+    badge: 'premium',
+    pages: FLAVOURS.map((f, i) => {
+      const prev = FLAVOURS[(i + FLAVOURS.length - 1) % FLAVOURS.length]
+      const next = FLAVOURS[(i + 1) % FLAVOURS.length]
+      return {
+        id: `p${i + 1}`,
+        ...(i ? { transition: slide() } : {}),
+        background: { type: 'solid' as const, color: '#FFF8E7' },
+        elements: [
+          tx({ x: 80, y: 60, width: 600, height: 50, text: 'SIP & CO.', fontFamily: 'Space Grotesk', bold: true, fontSize: 30, letterSpacing: 10, fill: '#3B2A20', animation: an('fade', 0, 0.4) }),
+          tx({ x: 1240, y: 60, width: 600, height: 50, text: `${String(i + 1).padStart(2, '0')} / ${String(FLAVOURS.length).padStart(2, '0')}`, fontFamily: 'DM Mono', fontSize: 28, letterSpacing: 4, fill: '#3B2A20', align: 'right', animation: an('fade', 0, 0.4) }),
+          ...sliderCard(-40, 400, 340, prev, false, 0.15),
+          ...sliderCard(1620, 400, 340, next, false, 0.25),
+          ...sliderCard(700, 300, 520, f, true, 0),
+          tx({ x: 560, y: 880, width: 800, height: 130, text: f.name, fontFamily: 'Lobster', fontSize: 104, fill: f.ink, align: 'center', animation: up(0.45, 0.6) }),
+          tx({ x: 560, y: 1000, width: 800, height: 40, text: 'COLD-PRESSED · NO ADDED SUGAR · 250 ML', fontFamily: 'Space Grotesk', bold: true, fontSize: 22, letterSpacing: 6, fill: '#8C7A6B', align: 'center', animation: an('fade', 0.7, 0.4) }),
+        ],
+      }
+    }),
   },
 ]
